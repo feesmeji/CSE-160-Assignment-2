@@ -15,6 +15,10 @@ class Cube{
         //Pass color of a point to u_FragColor var
         gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
 
+
+        // Pass the color of a point to u_FragColor uniform variable
+        gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);        
+
         // //Draw 
         // var d = this.size/200.0; //delta
 

@@ -2,11 +2,9 @@
 // Vertex shader program
 var VSHADER_SOURCE = `
   attribute vec4 a_Position;
-  uniform float u_Size;
+  uniform mat4 u_ModelMatrix;
   void main() { 
-    gl_Position = a_Position;
-    //gl_PointSize = 30.0;
-    gl_PointSize = u_Size;
+    gl_Position = u_ModelMatrix * a_Position;
   }`
 //where pointsize changes the size of the squares.
 
@@ -25,6 +23,7 @@ let gl;
 let a_Position;
 let u_FragColor;
 let u_Size;
+let u_ModelMatrix;
 
 function setupWebGL(){
   // Retrieve <canvas> element
@@ -61,12 +60,16 @@ function connectVariablesToGLSL(){
     return;
   }
 
-  //Get the storage loc. of u_Size
-  u_Size = gl.getUniformLocation(gl.program, 'u_Size');
-  if(!u_Size) {
-    console.log('Failed to get the storage location of u_Size');
+  u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+  if(!u_ModelMatrix){
+    console.log('Failed to get the storage location of u_ModelMatrix');
     return;
   }
+
+  // Set an initial value for this matrix to identify
+  var identityM = new Matrix4();
+  gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
+
 }
 
 // Constants
@@ -79,14 +82,14 @@ const CIRCLE = 2;
 let g_selectedColor=[1.0,1.0,1.0,1.0];
 let g_selectedSize = 5;
 let g_selectedType=POINT;
-let g_selectedSegment = 3;
+//let g_selectedSegment = 3;
 
 function addActionForHTMLUI(){
 
   //Color buttons on webpage and shape type
   document.getElementById('green').onclick = function() { g_selectedColor = [0.0,1.0,0.0,1.0]; };
   document.getElementById('red').onclick = function() { g_selectedColor = [1.0,0.0,0.0,1.0]; };
-  document.getElementById('clearButton').onclick = function() { g_shapesList=[]; renderAllShapes();};
+  //document.getElementById('clearButton').onclick = function() { g_shapesList=[]; renderAllShapes();};
 
   document.getElementById('pointButton').onclick = function() {g_selectedType=POINT};
   document.getElementById('triButton').onclick = function() {g_selectedType=TRIANGLE};
@@ -127,7 +130,7 @@ function main() {
   renderAllShapes();
 }
 
-var g_shapesList = [];
+//var g_shapesList = [];
 
 //  var g_points = [];  // The array for the position of a mouse press
 //  var g_colors = [1.0, 1.0, 1.0, 1.0];  // The array to store the color of a point
@@ -154,7 +157,7 @@ function click(ev) {
   point.position=[x,y];
   point.color=g_selectedColor.slice();
   point.size=g_selectedSize;
-  g_shapesList.push(point);
+  //g_shapesList.push(point);
   //g_selectedType.push(point);
   // Store the coordinates to g_points array  (where to put the squares on the canvas)
   /* g_points.push([x, y]);
@@ -256,11 +259,21 @@ function renderAllShapes(){
   //Draw a cube
   var body = new Cube();
   body.color = [1.0, 0.0, 0.0, 1.0];
+  body.matrix.translate(-0.25, -0.5, 0.0);
+  body.matrix.scale(0.5, 1, 0.5);         //this one happens first! Right to left matrix multiplication
   body.render();
+
+  // Draw a left arm
+  var leftArm = new Cube();
+  leftArm.color = [1,1,0,1];
+  leftArm.matrix.setTranslate(0.7,0.0,0.0);
+  leftArm.matrix.rotate(45, 0, 0, 1);
+  leftArm.matrix.scale(0.25, 0.7, 0.5);
+  leftArm.render();
 
   //Check the time at the end of the function, and show on web page
   var duration = performance.now() - startTime;
-  sendTextToHTML("numdot: " + len + " ms: " + Math.floor(duration) + " fps: " + Math.floor(10000/duration)/10, "numdot");
+  sendTextToHTML("numdot: " + Math.floor(duration) + " fps: " + Math.floor(10000/duration)/10, "numdot");
 }
 
 // Set the text of a HTML element
