@@ -38,6 +38,8 @@ function setupWebGL(){
     console.log('Failed to get the rendering context for WebGL');
     return;
   }
+  gl.enable(gl.DEPTH_TEST); //Depth buffer will keep track of whats in front of something else.
+
 }
 
 function connectVariablesToGLSL(){
@@ -91,6 +93,7 @@ let g_selectedColor=[1.0,1.0,1.0,1.0];
 let g_selectedSize = 5;
 let g_selectedType=POINT;
 let g_globalAngle = 0;
+let g_yellowAngle = 0;
 //let g_selectedSegment = 3;
 
 function addActionForHTMLUI(){
@@ -109,8 +112,15 @@ function addActionForHTMLUI(){
   document.getElementById('greenSlide').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100; });
   document.getElementById('blueSlide').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100; });
 
-  //Size Slider Events
-  document.getElementById('angleSlide').addEventListener('mousemove', function() {g_globalAngle = this.value; renderAllShapes(); });
+  //Size Slider Events (chat gpt helped me fix this function, for some reason the professor's code was 
+  // causing the program to draw when I simply just hovered my mouse over the slider, which I don't want)
+  document.getElementById('angleSlide').addEventListener('input', function() {
+    g_globalAngle = this.value; 
+    renderAllShapes(); 
+  });  //calls renderallshapes everytime the slider moves dynamically. Updates happen on the current state of the world.
+
+  // Color Slider Events
+  document.getElementById('yellowSlide').addEventListener('mousemove', function() {g_yellowAngle = this.value; renderAllShapes();});
 
   document.getElementById('drawingButton').onclick = function(){drawMyDrawing();};  //chat gpt helped me come up with this line of code
 }
@@ -132,7 +142,8 @@ function main() {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
   // Clear <canvas>
-  //gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //clears the color and the depths
+
   renderAllShapes();
 }
 
@@ -253,8 +264,7 @@ function renderAllShapes(){
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
   // Clear <canvas>  (rendering points)
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); 
   // var len = g_shapesList.length;
 
   // for(var i = 0; i < len; i++) {
@@ -266,28 +276,31 @@ function renderAllShapes(){
   //drawTriangle3D([ -1.0, 0.0, 0.0,   -0.5, -1.0, 0.0,   0.0, 0.0, 0.0 ]);
 
 
-  //Draw a cube
+  //Draw a cube (red one)
   var body = new Cube();
   body.color = [1.0, 0.0, 0.0, 1.0];
-  body.matrix.translate(-0.25, -0.5, 0.0);
-  body.matrix.scale(0.5, 1, 0.5);         //this one happens first! Right to left matrix multiplication
+  body.matrix.translate(-0.25, -0.75, 0.0);
+  body.matrix.rotate(-5,1,0,0);
+  body.matrix.scale(0.5, 0.3, 0.5);         //this one happens first! Right to left matrix multiplication
   body.render();
 
-  // Draw a left arm
+  // Draw a yellow left arm
   var leftArm = new Cube();
   leftArm.color = [1,1,0,1];
-  leftArm.matrix.setTranslate(0.7,0,0.0);
-  leftArm.matrix.rotate(45, 0, 0, 1);
+  leftArm.matrix.setTranslate(0,-0.5,0.0);
+  leftArm.matrix.rotate(-5, 1, 0, 0);
+  leftArm.matrix.rotate(-g_yellowAngle, 0, 0, 1);
   leftArm.matrix.scale(0.25, 0.7, 0.5);
+  leftArm.matrix.translate(-0.5, 0, 0);
   leftArm.render();
 
 
-  //Test box
+  //Test box  (pink box)
   var box = new Cube();
   box.color = [1,0,1,1];
-  box.matrix.translate(0,0,-0.50, 0);
+  box.matrix.translate(-0.1,0.1,0.0,0);
   box.matrix.rotate(-30, 1, 0, 0);
-  box.matrix.scale(0.5, 0.5, 0.5);
+  box.matrix.scale(0.2, 0.4, 0.2);
   box.render();
 
   //Check the time at the end of the function, and show on web page

@@ -41,16 +41,38 @@ class Cube{
 
         //Front of cube
         drawTriangle3D( [0,0,0,  1,1,0,  1,0,0 ]);
-        //drawTriangle3D([0.0, 0.0, 0.0,  1.0, 1.0, 0.0,  1.0, 0.0, 0.0 ]);
         drawTriangle3D( [0,0,0,  0,1,0,  1,1,0 ]);
 
+
+        //Back of cube (when drawing things, webgl renders objects closer to the camera when the z coordinate is less than zero. Further away from camera if z axis is greater than zero)
+        drawTriangle3D( [0,0,1,  1,1,1,  1,0,1 ]);
+        drawTriangle3D( [0,0,1,  0,1,1,  1,1,1 ]);
         // Fake lighting (Pass the color of a point to u_FragColor uniform variable)
         gl.uniform4f(u_FragColor, rgba[0]*0.9, rgba[1]*0.9, rgba[2]*0.9, rgba[3]);
 
         //Top of cube
         drawTriangle3D( [0,1,0,   0,1,1,  1,1,1]);
         drawTriangle3D( [0,1,0,   1,1,1,  1,1,0]);
-    
+        
+
+        //Right side of cube
+        drawTriangle3D([1,1,1,   1,0,1,    1, 0, 0])// right side of cube triangle 1
+        drawTriangle3D([1,1,1,   1,1,0,    1, 0, 0])//right side of cube triangle 2
+
+        //Left side of triangle
+        drawTriangle3D([0,0,0,   0,1,0,   0,1,1]) //left side of cube triangle 1
+        drawTriangle3D([0,0,0,   0,0,1,   0,1,1]) //left side of cube triangle 2
+        // // ChatGPT helped me come up with these lines of code
+        // drawTriangle3D([0, 0, 0, 1, 1, 0, 1, 0, 0]);
+        // drawTriangle3D([0, 0, 0, 0, 1, 0, 1, 1, 0]); // Left
+        // drawTriangle3D([1, 0, 0, 1, 1, 1, 1, 0, 1]); // Right (first triangle)
+        // //drawTriangle3D([1, 1, 1, 1, 1, 0, 1, 0, 1]); // Right (second triangle)
+
+        // drawTriangle3D([0, 0, 0, 1, 0, 0, 1, 0, 1]); // Bottom
+        // drawTriangle3D([0, 0, 1, 1, 0, 1, 1, 1, 1]); // Back
+        // //drawTriangle3D([0, 0, 0, 0, 1, 1, 0, 1, 0]); // Left (second triangle)
+
+
         // Other sides of cube top, bottom, left, right, back
         // <fill this in yourself>
     }
