@@ -54,6 +54,9 @@ class Cube{
         drawTriangle3D( [0,1,0,   0,1,1,  1,1,1]);
         drawTriangle3D( [0,1,0,   1,1,1,  1,1,0]);
         
+        //Bottom of cube
+        drawTriangle3D( [0,0,0,   0,0,1,  1,0,1]);
+        drawTriangle3D( [0,0,0,   1,0,1,  1,0,0]);
 
         //Right side of cube
         drawTriangle3D([1,1,1,   1,0,1,    1, 0, 0])// right side of cube triangle 1
