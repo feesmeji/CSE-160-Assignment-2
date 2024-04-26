@@ -93,27 +93,14 @@ let g_selectedColor=[1.0,1.0,1.0,1.0];
 let g_selectedSize = 5;
 let g_selectedType=POINT;
 let g_globalAngle = 0;
+let g_globalAngleY = 0;
 let g_yellowAngle = 0;
 let g_magentaAngle = 0;
-let g_yellowAnimation=false;  //Allways start without animation when starting up
+let g_yellowAnimation=false;  //Always start without animation when starting up
+let g_magentaAnimation = false;
 //let g_selectedSegment = 3;
 
 function addActionForHTMLUI(){
-
-  //Color buttons on webpage and shape type
-  // document.getElementById('green').onclick = function() { g_selectedColor = [0.0,1.0,0.0,1.0]; };
-  // document.getElementById('red').onclick = function() { g_selectedColor = [1.0,0.0,0.0,1.0]; };
-  // //document.getElementById('clearButton').onclick = function() { g_shapesList=[]; renderAllShapes();};
-
-  // document.getElementById('pointButton').onclick = function() {g_selectedType=POINT};
-  // document.getElementById('triButton').onclick = function() {g_selectedType=TRIANGLE};
-  // document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE};
-
-  // //Slider Events
-  // document.getElementById('redSlide').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/100; });
-  // document.getElementById('greenSlide').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100; });
-  // document.getElementById('blueSlide').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100; });
-
   //Button Events
   document.getElementById('animationYellowOffButton').onclick = function() {g_yellowAnimation=false;};
   document.getElementById('animationYellowOnButton').onclick = function() {g_yellowAnimation=true;};
@@ -125,13 +112,14 @@ function addActionForHTMLUI(){
     renderAllShapes(); 
   });  //calls renderallshapes everytime the slider moves dynamically. Updates happen on the current state of the world.
 
+  document.getElementById('angleSlideY').addEventListener('input', function() {
+    g_globalAngleY = this.value; 
+    renderAllShapes(); 
+  });
   // Color Slider Events
   document.getElementById('yellowSlide').addEventListener('mousemove', function() {g_yellowAngle = this.value; renderAllShapes();});
 
   document.getElementById('magentaSlide').addEventListener('mousemove', function() {g_magentaAngle = this.value; renderAllShapes();});
-
-
-  document.getElementById('drawingButton').onclick = function(){drawMyDrawing();};  //chat gpt helped me come up with this line of code
 }
 
 
@@ -205,74 +193,8 @@ function click(ev) {
   point.position=[x,y];
   point.color=g_selectedColor.slice();
   point.size=g_selectedSize;
-  //g_shapesList.push(point);
-  //g_selectedType.push(point);
-  // Store the coordinates to g_points array  (where to put the squares on the canvas)
-  /* g_points.push([x, y]);
-  // Store the coordinates to g_points array
-  //g_colors.push(g_selectedColor); //this holds a pointer
-
-  g_colors.push(g_selectedColor.slice());
-
-
-  //Store the size to the g_sizes array
-  g_sizes.push(g_selectedSize); */
-
-
-  /*   if (x >= 0.0 && y >= 0.0) {      // First quadrant
-    g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Red
-  } else if (x < 0.0 && y < 0.0) { // Third quadrant
-    g_colors.push([0.0, 1.0, 0.0, 1.0]);  // Green
-  } else {                         // Others
-    g_colors.push([1.0, 1.0, 1.0, 1.0]);  // White
-  } */
-
-  // draw all of the shapes that need to appear on the canvas. 
   renderAllShapes();
 }
-
-function drawMyDrawing() {
-  // Set color as yellow
-  gl.uniform4f(u_FragColor, 1.0, 1.0, 0.0, 1.0); // chat gpt helped me come up with this line (debug color not working for this function), Wendy the tutor gave me ideasof what could work which eventually led me to this
-
-  //chat gpt helped me come up with these first two lines
-  // yellow triangles
-  drawTriangle([0, 0, 0.4, 0.8, -0.4, 0.8]); //tri 1
-  drawTriangle([0, 0, -0.4, 0.8, -0.8, 0.4]); //tri 2
-  drawTriangle([0, 0, -0.8, 0.4, -0.9, 0.0]); //tri 3
-  drawTriangle([0, 0, -0.9, 0, -0.8, -0.4]);  //tri 4
-  drawTriangle([0, 0, -0.8, -0.4, -0.4, -0.8]);  //tri 5
-  drawTriangle([0, 0, -0.4, -0.8, 0.4, -0.8]);  //tri 6
-  drawTriangle([0, 0, -0.4, -0.8, 0.4, -0.8]);  //tri 7
-  drawTriangle([0, 0, 0.4, -0.8, 0.8, -0.4]); //tri 8
-  drawTriangle([0, 0, 0.8, -0.4, 0.9, 0]); //tri 9
-  drawTriangle([0, 0, 0.9, 0.0, 0.8, 0.4]); //tri 10
-  drawTriangle([0, 0, 0.4, 0.8, 0.8, 0.4]); //tri 11
-
-  //draw blue eyes
-  gl.uniform4f(u_FragColor, 0.0, 0.0, 1.0, 1.0); // chat gpt helped me come up with this line (debug color not working for this function), Wendy the tutor gave me ideasof what could work which eventually led me to this
-  drawTriangle([-0.5, 0.1, -0.5, 0.4, -0.2, 0.4])
-  drawTriangle([-0.5, 0.1, -0.2, 0.4, -0.2, 0.1])
-  drawTriangle([0.5, 0.1, 0.5, 0.4, 0.2, 0.4])
-  drawTriangle([0.5, 0.1, 0.2, 0.4, 0.2, 0.1])
-
-  //draw red nose
-  gl.uniform4f(u_FragColor, 1.0, 0.0, 0.0, 1.0); 
-  drawTriangle([-0.2, -0.2, -0.2, 0.0, 0.2, 0.0])
-  drawTriangle([-0.2, -0.2, 0.2, 0.0, 0.2, -0.2])
-
-  //draw black mouth
-  gl.uniform4f(u_FragColor, 0.0, 0.0, 0.0, 1.0); 
-  drawTriangle([-0.5, -0.3, 0.5, -0.6, -0.5, -0.6])
-  drawTriangle([-0.5, -0.3, 0.5, -0.6, 0.5, -0.3])
-
-
-  //draw red tounge
-  gl.uniform4f(u_FragColor, 1.0, 0.0, 0.0, 1.0); 
-  drawTriangle([-0.2, -0.6, -0.2, -0.4, 0.2, -0.4])
-  drawTriangle([-0.2, -0.6, 0.2, -0.4, 0.2, -0.6])
-}
-
 
 function convertCoordinatesEventToGL(ev){
   var x = ev.clientX; // x coordinate of a mouse pointer
@@ -290,7 +212,7 @@ function updateAnimationAngles(){ //put all of the different angles that we are 
   if (g_yellowAnimation){                             //g_yellowAnimation is currently being used to animate all of the objects
     g_yellowAngle = (45*Math.sin(g_seconds));
   }
-  if(g_yellowAngle){
+  if(g_yellowAnimation){
     g_magentaAngle = (45*Math.sin(3*g_seconds));
   }
 }
@@ -303,48 +225,72 @@ function renderAllShapes(){
   var globalRotMat=new Matrix4().rotate(g_globalAngle,0,1,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
+  //Pass the matrix to u_ModelMatrix attribute (ChatGPT helped me create this y-axis slider part)
+  var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0).rotate(g_globalAngleY, 1, 0, 0);
+  gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
+
+
   // Clear <canvas>  (rendering points)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); 
-  // var len = g_shapesList.length;
 
-  // for(var i = 0; i < len; i++) {
-  //   g_shapesList[i].render();
-
-  // }
-
-  //Draw a test triangle
-  //drawTriangle3D([ -1.0, 0.0, 0.0,   -0.5, -1.0, 0.0,   0.0, 0.0, 0.0 ]);
-
-
-  //Draw a cube (red one)
+  //Draw Chicken Body
   var body = new Cube();
-  body.color = [1.0, 0.0, 0.0, 1.0];
-  body.matrix.translate(-0.25, -0.75, 0.0);
-  body.matrix.rotate(-5,1,0,0);
-  body.matrix.scale(0.5, 0.3, 0.5);         //this one happens first! Right to left matrix multiplication
+  body.color = [1.0, 1.0, 1.0, 1.0];
+  body.matrix.scale(0.6,0.6,0.6);
   body.render();
 
-  // Draw a yellow left arm
-  var leftArm = new Cube();
-  leftArm.color = [1,1,0,1];
-  leftArm.matrix.setTranslate(0,-0.5,0.0);
-  leftArm.matrix.rotate(-5, 1, 0, 0);
-  // leftArm.matrix.rotate(-g_yellowAngle, 0, 0, 1);  //2.6: rotate the yellow joint
-  leftArm.matrix.rotate(-g_yellowAngle, 0, 0, 1);  //2.6: rotate the yellow joint
-  var yellowCoordinatesMat = new Matrix4(leftArm.matrix);
-  leftArm.matrix.scale(0.25, 0.7, 0.5);
-  leftArm.matrix.translate(-0.5, 0, 0);
-  leftArm.render();
+  // Left Wing
+  var left_wing = new Cube();
+  left_wing.color = [1.0, 1.0, 1.0, 1.0];
+  left_wing.matrix.translate(0.0, 0.10, -0.35)
+  left_wing.matrix.scale(0.5, 0.4, -0.10)
+  left_wing.render();
 
-  //Test box (pink box)
-  var box = new Cube();
-  box.color = [1,0,1,1];
-  box.matrix = yellowCoordinatesMat;
-  box.matrix.translate(0,0.65,0.0,0);
-  box.matrix.rotate(g_magentaAngle, 0, 0, 1);
-  box.matrix.scale(0.3, 0.3, 0.3);
-  box.matrix.translate(-0.5,0,-0.001);
-  box.render();
+  //Right Wing
+  var right_wing = new Cube();
+  right_wing.color = [1.0, 1.0, 1.0, 1.0];
+  right_wing.matrix.translate(0.0, 0.10, 0.35);
+  right_wing.matrix.scale(0.5, 0.4, 0.10); // Keep the original scale values
+  right_wing.render();
+  
+  //Head
+  var head = new Cube();
+  head.color = [1.0,1.0,1.0,1.0]
+  head.matrix.translate(-0.4, 0.3, 0.0);
+  head.matrix.scale(0.25, 0.5, 0.5); 
+
+  head.render();
+
+//Prof's drawing
+  // //Draw a cube (red one)
+  // var body = new Cube();
+  // body.color = [1.0, 0.0, 0.0, 1.0];
+  // body.matrix.translate(-0.25, -0.75, 0.0);
+  // body.matrix.rotate(-5,1,0,0);
+  // body.matrix.scale(0.5, 0.3, 0.5);         //this one happens first! Right to left matrix multiplication
+  // body.render();
+
+  // // Draw a yellow left arm
+  // var leftArm = new Cube();
+  // leftArm.color = [1,1,0,1];
+  // leftArm.matrix.setTranslate(0,-0.5,0.0);
+  // leftArm.matrix.rotate(-5, 1, 0, 0);
+  // // leftArm.matrix.rotate(-g_yellowAngle, 0, 0, 1);  //2.6: rotate the yellow joint
+  // leftArm.matrix.rotate(-g_yellowAngle, 0, 0, 1);  //2.6: rotate the yellow joint
+  // var yellowCoordinatesMat = new Matrix4(leftArm.matrix);
+  // leftArm.matrix.scale(0.25, 0.7, 0.5);
+  // leftArm.matrix.translate(-0.5, 0, 0);
+  // leftArm.render();
+
+  // //Test box (pink box)
+  // var box = new Cube();
+  // box.color = [1,0,1,1];
+  // box.matrix = yellowCoordinatesMat;
+  // box.matrix.translate(0,0.65,0.0,0);
+  // box.matrix.rotate(g_magentaAngle, 0, 0, 1);
+  // box.matrix.scale(0.3, 0.3, 0.3);
+  // box.matrix.translate(-0.5,0,-0.001);
+  // box.render();
 
   //Check the time at the end of the function, and show on web page
   var duration = performance.now() - startTime;
