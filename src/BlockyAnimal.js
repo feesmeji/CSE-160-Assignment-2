@@ -287,7 +287,7 @@ function convertCoordinatesEventToGL(ev){
 }
 
 function updateAnimationAngles(){ //put all of the different angles that we are going to move with the on/off button here
-  if (g_yellowAnimation){
+  if (g_yellowAnimation){                             //g_yellowAnimation is currently being used to animate all of the objects
     g_yellowAngle = (45*Math.sin(g_seconds));
   }
   if(g_yellowAngle){
