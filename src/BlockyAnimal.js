@@ -95,23 +95,28 @@ let g_selectedType=POINT;
 let g_globalAngle = 0;
 let g_yellowAngle = 0;
 let g_magentaAngle = 0;
+let g_yellowAnimation=false;  //Allways start without animation when starting up
 //let g_selectedSegment = 3;
 
 function addActionForHTMLUI(){
 
   //Color buttons on webpage and shape type
-  document.getElementById('green').onclick = function() { g_selectedColor = [0.0,1.0,0.0,1.0]; };
-  document.getElementById('red').onclick = function() { g_selectedColor = [1.0,0.0,0.0,1.0]; };
-  //document.getElementById('clearButton').onclick = function() { g_shapesList=[]; renderAllShapes();};
+  // document.getElementById('green').onclick = function() { g_selectedColor = [0.0,1.0,0.0,1.0]; };
+  // document.getElementById('red').onclick = function() { g_selectedColor = [1.0,0.0,0.0,1.0]; };
+  // //document.getElementById('clearButton').onclick = function() { g_shapesList=[]; renderAllShapes();};
 
-  document.getElementById('pointButton').onclick = function() {g_selectedType=POINT};
-  document.getElementById('triButton').onclick = function() {g_selectedType=TRIANGLE};
-  document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE};
+  // document.getElementById('pointButton').onclick = function() {g_selectedType=POINT};
+  // document.getElementById('triButton').onclick = function() {g_selectedType=TRIANGLE};
+  // document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE};
 
-  //Slider Events
-  document.getElementById('redSlide').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/100; });
-  document.getElementById('greenSlide').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100; });
-  document.getElementById('blueSlide').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100; });
+  // //Slider Events
+  // document.getElementById('redSlide').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/100; });
+  // document.getElementById('greenSlide').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100; });
+  // document.getElementById('blueSlide').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100; });
+
+  //Button Events
+  document.getElementById('animationYellowOffButton').onclick = function() {g_yellowAnimation=false;};
+  document.getElementById('animationYellowOnButton').onclick = function() {g_yellowAnimation=true;};
 
   //Size Slider Events (chat gpt helped me fix this function, for some reason the professor's code was 
   // causing the program to draw when I simply just hovered my mouse over the slider, which I don't want)
@@ -148,7 +153,8 @@ function main() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //clears the color and the depths
 
-  renderAllShapes();
+  //renderAllShapes();
+  requestAnimationFrame(tick);
 }
 
 //var g_shapesList = [];
@@ -156,8 +162,25 @@ function main() {
 //  var g_points = [];  // The array for the position of a mouse press
 //  var g_colors = [1.0, 1.0, 1.0, 1.0];  // The array to store the color of a point
 //  var g_sizes = [];
-function tick(){
 
+// Keep track of startime when program starts and the seconds
+var g_startTime=performance.now()/1000.0;
+var g_seconds=performance.now/1000.0-g_startTime;
+
+//Called by the broswer repeatedly whenever its time
+function tick(){
+  // Save the current time
+  g_seconds = performance.now()/1000.0-g_startTime;
+  console.log(g_seconds);
+
+  //Update Animation Angles
+  updateAnimationAngles();
+
+  // Draw everything
+  renderAllShapes();
+
+  // Tell the browser to update again when it has time
+  requestAnimationFrame(tick);
 }
 
 
@@ -263,6 +286,15 @@ function convertCoordinatesEventToGL(ev){
   
 }
 
+function updateAnimationAngles(){ //put all of the different angles that we are going to move with the on/off button here
+  if (g_yellowAnimation){
+    g_yellowAngle = (45*Math.sin(g_seconds));
+  }
+  if(g_yellowAngle){
+    g_magentaAngle = (45*Math.sin(3*g_seconds));
+  }
+}
+
 function renderAllShapes(){
 
   var startTime = performance.now();
@@ -297,12 +329,12 @@ function renderAllShapes(){
   leftArm.color = [1,1,0,1];
   leftArm.matrix.setTranslate(0,-0.5,0.0);
   leftArm.matrix.rotate(-5, 1, 0, 0);
+  // leftArm.matrix.rotate(-g_yellowAngle, 0, 0, 1);  //2.6: rotate the yellow joint
   leftArm.matrix.rotate(-g_yellowAngle, 0, 0, 1);  //2.6: rotate the yellow joint
   var yellowCoordinatesMat = new Matrix4(leftArm.matrix);
   leftArm.matrix.scale(0.25, 0.7, 0.5);
   leftArm.matrix.translate(-0.5, 0, 0);
   leftArm.render();
-
 
   //Test box (pink box)
   var box = new Cube();
