@@ -256,9 +256,8 @@ function renderAllShapes(){
   //Head
   var head = new Cube();
   head.color = [1.0,1.0,1.0,1.0]
-  head.matrix.translate(-0.4, 0.3, 0.0);
+  head.matrix.translate(-0.35, 0.3, 0.0);
   head.matrix.scale(0.25, 0.5, 0.5); 
-
   head.render();
 
 //Prof's drawing
