@@ -260,6 +260,19 @@ function renderAllShapes(){
   head.matrix.scale(0.25, 0.5, 0.5); 
   head.render();
 
+  //beak
+  var beak = new Cube();
+  beak.color = [1.0, 1.0, 0.0, 1.0];
+  beak.matrix.translate(-0.57, 0.3, 0);
+  beak.matrix.scale(0.20, 0.20, 0.5); 
+  beak.render();
+
+  //Wattle (red part)
+  var wattle = new Cube();
+  wattle.color = [1.0, 0.0, 0.0, 1.0];
+  wattle.matrix.translate(-0.52, 0.125, -0.001)
+  wattle.matrix.scale(0.10, 0.1498, 0.2); 
+  wattle.render();
 //Prof's drawing
   // //Draw a cube (red one)
   // var body = new Cube();
