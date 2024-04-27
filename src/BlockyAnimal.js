@@ -136,7 +136,7 @@ function main() {
   canvas.onmousemove = function (ev) { if(ev.buttons == 1) {click(ev) } };  //drag and move mouse on canvas
 
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.clearColor(0.0, 1.0, 0.0, 1.0);
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //clears the color and the depths
@@ -273,6 +273,36 @@ function renderAllShapes(){
   wattle.matrix.translate(-0.52, 0.125, -0.001)
   wattle.matrix.scale(0.10, 0.1498, 0.2); 
   wattle.render();
+
+
+  //left eye
+  var left_eye = new Cube();
+  left_eye.color = [0.0, 0.0, 0.0, 1.0];
+  left_eye.matrix.translate(-0.50, 0.45, 0.20);
+  left_eye.matrix.scale(0.1, 0.1, 0.10);
+  left_eye.render();
+  
+  //Right Eye
+  var right_eye = new Cube();
+  right_eye.color = [0.0, 0.0, 0.0, 1.0];
+  right_eye.matrix.translate(-0.50, 0.45, -0.20);
+  right_eye.matrix.scale(0.1, 0.1, 0.10);
+  right_eye.render();
+
+  //upper left leg
+  var upper_leg1 = new Cube();
+  upper_leg1.color = [1.0, 1.0, 1.0, 1.0];
+  upper_leg1.matrix.translate(0, -0.35, -0.15)
+  upper_leg1.matrix.scale(0.13,0.13,0.13);
+  upper_leg1.render();
+
+  //upper right leg
+  var upper_leg2 = new Cube();
+  upper_leg2.color = [1.0, 1.0, 1.0, 1.0];
+  upper_leg2.matrix.translate(0, -0.35, 0.15)
+  upper_leg2.matrix.scale(0.13,0.13,0.13);
+  upper_leg2.render();
+
 //Prof's drawing
   // //Draw a cube (red one)
   // var body = new Cube();
