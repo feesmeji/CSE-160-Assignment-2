@@ -278,14 +278,14 @@ function renderAllShapes(){
   //left eye
   var left_eye = new Cube();
   left_eye.color = [0.0, 0.0, 0.0, 1.0];
-  left_eye.matrix.translate(-0.50, 0.45, 0.20);
+  left_eye.matrix.translate(-0.52001, 0.45, 0.20);
   left_eye.matrix.scale(0.1, 0.1, 0.10);
   left_eye.render();
   
   //Right Eye
   var right_eye = new Cube();
   right_eye.color = [0.0, 0.0, 0.0, 1.0];
-  right_eye.matrix.translate(-0.50, 0.45, -0.20);
+  right_eye.matrix.translate(-0.52001, 0.45, -0.20);
   right_eye.matrix.scale(0.1, 0.1, 0.10);
   right_eye.render();
 
@@ -317,6 +317,19 @@ function renderAllShapes(){
   mid_leg2.matrix.scale(0.08,0.5,0.08);
   mid_leg2.render();
 
+  //left foot
+  var left_foot = new Cube();
+  left_foot.color = [0.9647, 0.9255, 0.5216, 1.0];
+  left_foot.matrix.translate(-0.06, -0.75, -0.15)
+  left_foot.matrix.scale(0.2,0.10,0.2);
+  left_foot.render();
+
+  //left foot
+  var right_foot = new Cube();
+  right_foot.color = [0.9647, 0.9255, 0.5216, 1.0];
+  right_foot.matrix.translate(-0.06, -0.75, 0.15)
+  right_foot.matrix.scale(0.2,0.10,0.2);
+  right_foot.render();
 
 //Prof's drawing
   // //Draw a cube (red one)
