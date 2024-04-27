@@ -136,7 +136,7 @@ function main() {
   canvas.onmousemove = function (ev) { if(ev.buttons == 1) {click(ev) } };  //drag and move mouse on canvas
 
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.0, 1.0, 0.0, 1.0);
+  gl.clearColor(0.8, 0.8, 0.8, 1.0);
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //clears the color and the depths
@@ -306,16 +306,20 @@ function renderAllShapes(){
   //mid left leg
   var mid_leg1 = new Cube();
   mid_leg1.color = [0.9647, 0.9255, 0.5216, 1.0];
-  mid_leg1.matrix.translate(0, -0.45, -0.15)
+  mid_leg1.matrix.translate(0, -0.45, -0.15); // Translate to the base of the leg
+  mid_leg1.matrix.rotate(-g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
   mid_leg1.matrix.scale(0.08,0.5,0.08);
+  mid_leg1.matrix.translate(0, -0.20, 0.15); // Translate back to the original position
   mid_leg1.render();
 
+
+
   //mid right leg
-  var mid_leg2 = new Cube();
-  mid_leg2.color = [0.9647, 0.9255, 0.5216, 1.0];
-  mid_leg2.matrix.translate(0, -0.45, 0.15)
-  mid_leg2.matrix.scale(0.08,0.5,0.08);
-  mid_leg2.render();
+  // var mid_leg2 = new Cube();
+  // mid_leg2.color = [0.9647, 0.9255, 0.5216, 1.0];
+  // mid_leg2.matrix.translate(0, -0.45, 0.15)
+  // mid_leg2.matrix.scale(0.08,0.5,0.08);
+  // mid_leg2.render();
 
   //left foot
   var left_foot = new Cube();
