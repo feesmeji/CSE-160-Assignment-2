@@ -303,6 +303,21 @@ function renderAllShapes(){
   upper_leg2.matrix.scale(0.13,0.13,0.13);
   upper_leg2.render();
 
+  //mid left leg
+  var mid_leg1 = new Cube();
+  mid_leg1.color = [0.9647, 0.9255, 0.5216, 1.0];
+  mid_leg1.matrix.translate(0, -0.45, -0.15)
+  mid_leg1.matrix.scale(0.08,0.5,0.08);
+  mid_leg1.render();
+
+  //mid right leg
+  var mid_leg2 = new Cube();
+  mid_leg2.color = [0.9647, 0.9255, 0.5216, 1.0];
+  mid_leg2.matrix.translate(0, -0.45, 0.15)
+  mid_leg2.matrix.scale(0.08,0.5,0.08);
+  mid_leg2.render();
+
+
 //Prof's drawing
   // //Draw a cube (red one)
   // var body = new Cube();
