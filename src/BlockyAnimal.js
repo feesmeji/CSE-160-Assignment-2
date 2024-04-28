@@ -95,6 +95,7 @@ let g_selectedType=POINT;
 let g_globalAngle = 0;
 let g_globalAngleY = 0;
 let g_yellowAngle = 0;
+let g_yellowAngleRight = 0;
 let g_magentaAngle = 0;
 let g_yellowAnimation=false;  //Always start without animation when starting up
 let g_magentaAnimation = false;
@@ -118,6 +119,8 @@ function addActionForHTMLUI(){
   });
   // Color Slider Events
   document.getElementById('yellowSlide').addEventListener('mousemove', function() {g_yellowAngle = this.value; renderAllShapes();});
+
+  document.getElementById('yellowSlideRight').addEventListener('mousemove', function() {g_yellowAngleRight = this.value; renderAllShapes();});
 
   document.getElementById('magentaSlide').addEventListener('mousemove', function() {g_magentaAngle = this.value; renderAllShapes();});
 }
@@ -309,17 +312,18 @@ function renderAllShapes(){
   mid_leg1.matrix.translate(0, -0.45, -0.15); // Translate to the base of the leg
   mid_leg1.matrix.rotate(-g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
   mid_leg1.matrix.scale(0.08,0.5,0.08);
-  mid_leg1.matrix.translate(0, -0.20, 0.15); // Translate back to the original position
+  //mid_leg1.matrix.translate(0, -0.20, 0.15); // Translate back to the original position
   mid_leg1.render();
 
 
 
   //mid right leg
-  // var mid_leg2 = new Cube();
-  // mid_leg2.color = [0.9647, 0.9255, 0.5216, 1.0];
-  // mid_leg2.matrix.translate(0, -0.45, 0.15)
-  // mid_leg2.matrix.scale(0.08,0.5,0.08);
-  // mid_leg2.render();
+  var mid_leg2 = new Cube();
+  mid_leg2.color = [0.9647, 0.9255, 0.5216, 1.0];
+  mid_leg2.matrix.translate(0, -0.45, 0.15)
+  mid_leg2.matrix.rotate(-g_yellowAngleRight, 0, 0, 1);  // Rotate around the z-axis
+  mid_leg2.matrix.scale(0.08,0.5,0.08);
+  mid_leg2.render();
 
   //left foot
   var left_foot = new Cube();
