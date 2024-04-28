@@ -213,10 +213,10 @@ function convertCoordinatesEventToGL(ev){
 
 function updateAnimationAngles(){ //put all of the different angles that we are going to move with the on/off button here
   if (g_yellowAnimation){                             //g_yellowAnimation is currently being used to animate all of the objects
-    g_yellowAngle = (45*Math.sin(g_seconds));
+    g_yellowAngle = (-34*Math.sin(g_seconds));
   }
   if(g_yellowAnimation){
-    g_magentaAngle = (45*Math.sin(3*g_seconds));
+    g_yellowAngleRight = (34*Math.sin(g_seconds));
   }
 }
 
@@ -310,7 +310,7 @@ function renderAllShapes(){
   var mid_leg1 = new Cube();
   mid_leg1.color = [0.9647, 0.9255, 0.5216, 1.0];
   mid_leg1.matrix.translate(0, -0.45, -0.15); // Translate to the base of the leg
-  mid_leg1.matrix.rotate(-34*Math.sin(g_seconds), 0, 0, 1);  // Rotate around the z-axis
+  mid_leg1.matrix.rotate(g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
   var left_foot_coordMat = new Matrix4(mid_leg1.matrix);
   mid_leg1.matrix.scale(0.08,0.5,0.08);
   //mid_leg1.matrix.translate(0, -0.20, 0.15); // Translate back to the original position
@@ -321,7 +321,7 @@ function renderAllShapes(){
   mid_leg2.color = [0.9647, 0.9255, 0.5216, 1.0];
   mid_leg2.matrix.translate(0, -0.45, 0.15)
   //mid_leg2.matrix.rotate(-g_yellowAngleRight, 0, 0, 1);  // Rotate around the z-axis
-  mid_leg2.matrix.rotate(34*Math.sin(g_seconds), 0, 0, 1);  // Rotate around the z-axis
+  mid_leg2.matrix.rotate(g_yellowAngleRight, 0, 0, 1);  // Rotate around the z-axis
   var right_foot_coordMat = new Matrix4(mid_leg2.matrix);
   mid_leg2.matrix.scale(0.08,0.5,0.08);
   mid_leg2.render();
