@@ -101,6 +101,9 @@ let g_yellowAnimation=false;  //Always start without animation when starting up
 let g_magentaAnimation = false;
 let mouse_x = 0;
 let mouse_y = 0;
+let g_wingsAnimation = false;
+let g_wingAnimationleft = 0;
+let g_wingAnimationRight = 0;
 //let g_selectedSegment = 3;
 
 function addActionForHTMLUI(){
@@ -140,8 +143,8 @@ function mouseMoveHandler(ev) {
   let Y = ev.clientY - mouse_y;
   
   // Update rotation angles based on mouse movement
-  g_globalAngle += X * 1; // Adjust the sensitivity as needed
-  g_globalAngleY += Y * 1;
+  g_globalAngle += X * 1.5; // Adjust the sensitivity as needed
+  g_globalAngleY += Y * 1.5;
   
   // Store current mouse position
   mouse_x = ev.clientX;
@@ -171,6 +174,13 @@ function main() {
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.5, 0.5, 0.5, 1.0);
+
+
+  // Register function (event handler) to be called on a mouse press
+  //Code borrowed and learned from: https://people.ucsc.edu/~jrgu/asg2/blockyAnimal/BlockyAnimal.js
+  canvas.onclick = function(ev) {if(ev.shiftKey) {if (g_wingsAnimation){g_wingsAnimation = false} g_wingsAnimation = true}}
+  canvas.onmousedown = origin;
+  canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev) } };
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //clears the color and the depths
@@ -249,6 +259,12 @@ function updateAnimationAngles(){ //put all of the different angles that we are 
   if(g_yellowAnimation){
     g_yellowAngleRight = (34*Math.sin(g_seconds));
   }
+
+  if(g_wingsAnimation){
+    g_wingAnimationleft = (-34 * Math.sin(g_seconds)); //Chat gpt helped me figure out the math
+    g_wingAnimationRight = (34 * Math.sin(g_seconds));
+  }
+
 }
 
 function renderAllShapes(){
@@ -267,26 +283,57 @@ function renderAllShapes(){
   // Clear <canvas>  (rendering points)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); 
 
-  //Draw Chicken Body
-  var body = new Cube();
-  body.color = [1.0, 1.0, 1.0, 1.0];
-  body.matrix.scale(0.6,0.6,0.6);
-  body.render();
+// Draw Chicken Body
+var body = new Cube();
+body.color = [1.0, 1.0, 1.0, 1.0];
+body.matrix.scale(0.6, 0.6, 0.6);
+var bodyMatrix = new Matrix4(body.matrix); // Store the body's transformation matrix
+body.render();
 
-  // Left Wing
-  var left_wing = new Cube();
-  left_wing.color = [1.0, 1.0, 1.0, 1.0];
-  left_wing.matrix.translate(0.0, 0.10, -0.35)
-  left_wing.matrix.scale(0.5, 0.4, -0.10)
-  left_wing.render();
+// Left Wing
+var left_wing = new Cube();
+left_wing.color = [1.0, 0.0, 1.0, 1.0];
+left_wing.matrix.set(bodyMatrix); // Apply the body's transformation matrix to the wing
+left_wing.matrix.translate(0.0, 0.15, -0.40);
+left_wing.matrix.rotate(g_wingAnimationleft, 1, 0, 0);
+left_wing.matrix.scale(0.7, 0.5, -0.3);
+left_wing.render();
 
-  //Right Wing
-  var right_wing = new Cube();
-  right_wing.color = [1.0, 1.0, 1.0, 1.0];
-  right_wing.matrix.translate(0.0, 0.10, 0.35);
-  right_wing.matrix.scale(0.5, 0.4, 0.10); // Keep the original scale values
-  right_wing.render();
+// Right Wing
+var right_wing = new Cube();
+right_wing.color = [1.0, 0.0, 1.0, 1.0];
+right_wing.matrix.set(bodyMatrix); // Apply the body's transformation matrix to the wing
+right_wing.matrix.translate(0.0, 0.15, 0.40);
+right_wing.matrix.rotate(g_wingAnimationRight, 1, 0, 0);
+right_wing.matrix.scale(0.7, 0.5, 0.3);
+right_wing.render();
   
+
+
+  // //upper left leg
+  // var upper_leg1 = new Cube();
+  // upper_leg1.color = [1.0, 1.0, 1.0, 1.0];
+  // upper_leg1.matrix.translate(0, -0.35, -0.15)
+  // upper_leg1.matrix.scale(0.3,0.13,0.13);
+  // upper_leg1.render();
+
+  // //upper right leg
+  // var upper_leg2 = new Cube();
+  // upper_leg2.color = [1.0, 1.0, 1.0, 1.0];
+  // upper_leg2.matrix.translate(0, -0.35, 0.15)
+  // upper_leg2.matrix.scale(0.3,0.13,0.13);
+  // upper_leg2.render();
+
+  // //mid left leg
+  // var mid_leg1 = new Cube();
+  // mid_leg1.color = [0.9647, 0.9255, 0.5216, 1.0];
+  // mid_leg1.matrix.translate(0, -0.45, -0.15); // Translate to the base of the leg
+  // mid_leg1.matrix.rotate(g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
+  // var left_foot_coordMat = new Matrix4(mid_leg1.matrix);
+  // mid_leg1.matrix.scale(0.08,0.5,0.08);
+  // //mid_leg1.matrix.translate(0, -0.20, 0.15); // Translate back to the original position
+  // mid_leg1.render();
+
   //Head
   var head = new Cube();
   head.color = [1.0,1.0,1.0,1.0]
