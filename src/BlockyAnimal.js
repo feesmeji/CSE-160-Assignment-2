@@ -139,7 +139,7 @@ function main() {
   canvas.onmousemove = function (ev) { if(ev.buttons == 1) {click(ev) } };  //drag and move mouse on canvas
 
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.8, 0.8, 0.8, 1.0);
+  gl.clearColor(0.5, 0.5, 0.5, 1.0);
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //clears the color and the depths
@@ -161,8 +161,8 @@ var g_seconds=performance.now/1000.0-g_startTime;
 //Called by the broswer repeatedly whenever its time
 function tick(){
   // Save the current time
-  g_seconds = performance.now()/1000.0-g_startTime;
-  console.log(g_seconds);
+  g_seconds = performance.now()/130.0-g_startTime;
+  //console.log(g_seconds);
 
   //Update Animation Angles
   updateAnimationAngles();
@@ -265,7 +265,7 @@ function renderAllShapes(){
 
   //beak
   var beak = new Cube();
-  beak.color = [1.0, 1.0, 0.0, 1.0];
+  beak.color = [0.9647, 0.9255, 0.5216, 1.0];
   beak.matrix.translate(-0.57, 0.3, 0);
   beak.matrix.scale(0.20, 0.20, 0.5); 
   beak.render();
@@ -296,47 +296,53 @@ function renderAllShapes(){
   var upper_leg1 = new Cube();
   upper_leg1.color = [1.0, 1.0, 1.0, 1.0];
   upper_leg1.matrix.translate(0, -0.35, -0.15)
-  upper_leg1.matrix.scale(0.13,0.13,0.13);
+  upper_leg1.matrix.scale(0.3,0.13,0.13);
   upper_leg1.render();
 
   //upper right leg
   var upper_leg2 = new Cube();
   upper_leg2.color = [1.0, 1.0, 1.0, 1.0];
   upper_leg2.matrix.translate(0, -0.35, 0.15)
-  upper_leg2.matrix.scale(0.13,0.13,0.13);
+  upper_leg2.matrix.scale(0.3,0.13,0.13);
   upper_leg2.render();
 
   //mid left leg
   var mid_leg1 = new Cube();
   mid_leg1.color = [0.9647, 0.9255, 0.5216, 1.0];
   mid_leg1.matrix.translate(0, -0.45, -0.15); // Translate to the base of the leg
-  mid_leg1.matrix.rotate(-g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
+  mid_leg1.matrix.rotate(-34*Math.sin(g_seconds), 0, 0, 1);  // Rotate around the z-axis
+  var left_foot_coordMat = new Matrix4(mid_leg1.matrix);
   mid_leg1.matrix.scale(0.08,0.5,0.08);
   //mid_leg1.matrix.translate(0, -0.20, 0.15); // Translate back to the original position
   mid_leg1.render();
 
-
-
-  //mid right leg
+  // //mid right leg
   var mid_leg2 = new Cube();
   mid_leg2.color = [0.9647, 0.9255, 0.5216, 1.0];
   mid_leg2.matrix.translate(0, -0.45, 0.15)
-  mid_leg2.matrix.rotate(-g_yellowAngleRight, 0, 0, 1);  // Rotate around the z-axis
+  //mid_leg2.matrix.rotate(-g_yellowAngleRight, 0, 0, 1);  // Rotate around the z-axis
+  mid_leg2.matrix.rotate(34*Math.sin(g_seconds), 0, 0, 1);  // Rotate around the z-axis
+  var right_foot_coordMat = new Matrix4(mid_leg2.matrix);
   mid_leg2.matrix.scale(0.08,0.5,0.08);
   mid_leg2.render();
 
   //left foot
   var left_foot = new Cube();
   left_foot.color = [0.9647, 0.9255, 0.5216, 1.0];
-  left_foot.matrix.translate(-0.06, -0.75, -0.15)
+  left_foot.matrix = left_foot_coordMat;
+  left_foot.matrix.translate(0.0, -0.45, 0)
   left_foot.matrix.scale(0.2,0.10,0.2);
+  left_foot.matrix.translate(-0.3, 1.5, 0)
   left_foot.render();
 
-  //left foot
+  //right foot
   var right_foot = new Cube();
   right_foot.color = [0.9647, 0.9255, 0.5216, 1.0];
-  right_foot.matrix.translate(-0.06, -0.75, 0.15)
+  right_foot.matrix = right_foot_coordMat;
+  right_foot.matrix.translate(0.0, -0.45, 0.0)
   right_foot.matrix.scale(0.2,0.10,0.2);
+  right_foot.matrix.translate(-0.3, 1.5, 0)
+  // right_foot.matrix.scale(0.2,0.10,0.2);
   right_foot.render();
 
 //Prof's drawing
