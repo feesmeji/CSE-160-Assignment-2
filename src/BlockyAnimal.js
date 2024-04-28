@@ -96,9 +96,7 @@ let g_globalAngle = 0;
 let g_globalAngleY = 0;
 let g_yellowAngle = 0;
 let g_yellowAngleRight = 0;
-let g_magentaAngle = 0;
 let g_yellowAnimation=false;  //Always start without animation when starting up
-let g_magentaAnimation = false;
 let mouse_x = 0;
 let mouse_y = 0;
 let g_wattleAnimation = false;
@@ -126,34 +124,32 @@ function addActionForHTMLUI(){
 
   document.getElementById('yellowSlideRight').addEventListener('mousemove', function() {g_yellowAngleRight = this.value; renderAllShapes();});
 
-  document.getElementById('magentaSlide').addEventListener('mousemove', function() {g_magentaAngle = this.value; renderAllShapes();});
 
-
-// Mouse control to rotate (CHATGPT helped me with this):
+// Mouse control to rotate canvas(CHATGPT helped me with this):
 canvas.addEventListener('mousedown', function(ev) {
-  // Add event listener for mouse move to handle rotation while dragging
+  // Event listener for mouse move to handle rotation while dragging on canvas
   canvas.addEventListener('mousemove', mouseMoveHandler);
 });
 
-// Function to handle mouse move event for rotation (CHATGPT helped me with this):
+// handle mouse move for rotation of canvas(CHATGPT helped me with this):
 function mouseMoveHandler(ev) {
   // Calculate movement delta
   let X = ev.clientX - mouse_x;
   let Y = ev.clientY - mouse_y;
   
   // Update rotation angles based on mouse movement
-  g_globalAngle += X * 1; // Adjust the sensitivity as needed
+  g_globalAngle += X * 1; // Sensitivity of 1 to make it fast
   g_globalAngleY += Y * 1;
   
-  // Store current mouse position
+  // Store intermediate mouse position
   mouse_x = ev.clientX;
   mouse_y = ev.clientY;
   
   // Render shapes with updated rotation angles
-  renderAllShapes();
+  renderAllShapes(); //professor's code
 }
 
-// Function to handle mouse up event (CHATGPT helped me with this):
+// Function to handle mouse up event (rotate canvas) (CHATGPT helped me with this):
 canvas.addEventListener('mouseup', function(ev) {
   // Remove the mouse move event listener when mouse is released
   canvas.removeEventListener('mousemove', mouseMoveHandler);
