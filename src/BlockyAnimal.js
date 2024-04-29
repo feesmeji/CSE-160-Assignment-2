@@ -346,7 +346,7 @@ function renderAllShapes(){
   var upper_leg2 = new Cube();
   upper_leg2.color = [1.0, 1.0, 1.0, 1.0];
   upper_leg2.matrix.translate(0, -0.25, 0.15)
-  upper_leg2.matrix.rotate(g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
+  upper_leg2.matrix.rotate(g_yellowAngleRight, 0, 0, 1);  // Rotate around the z-axis
   upper_leg2.matrix.scale(0.31,0.15,0.13);
   upper_leg2.render();
 
