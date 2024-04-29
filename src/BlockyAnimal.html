@@ -31,12 +31,12 @@
       <p>
 
 <!-- Yellow Slider controls the left-to-right movement of the leg (ChatGPT helped me modify this line of code) -->
-    <p>Left_Leg Slider <input type="range" min="-34.0" max="34.0" step="0.1" value="0" class="slider" id="yellowSlide"></p>
-
     <p>Right_Leg Slider <input type="range" min="-34.0" max="34.0" step="0.1" value="0" class="slider" id="yellowSlideRight"></p>
 
     <p>Left_Foot Slider <input type="range" min="-90.0" max="90.0" step="0.1" value="0" class="slider" id="left_foot_Slide"></p>
     
+  <!-- Chat gpt helped me debug my slider control for a second level joint (I originally had but got rid of and couldn't get it to work anymore when I tried implementing again). So it suggested me to add this line of code-->
+  <p>Second-level Joint Slider (Left Leg)<input type="range" min="-34" max="34" step="0.1" value="0" class="slider" id="midLegSlider"><p>
     Main Animation: 
     <button type="button" id="animationYellowOnButton">ON</button>
     <button type="button" id="animationYellowOffButton">OFF</button>

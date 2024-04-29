@@ -97,6 +97,7 @@ let g_globalAngleY = 0;
 let g_yellowAngle = 0;
 let g_yellowAngleRight = 0;
 let g_left_footangle = 0;
+let g_midLegAngle = 0;   //Chat gpt helped me debug my slider control for a second level joint (I originally had but got rid of and couldn't get it to work anymore when I tried implementing again). So it suggested me to add this line of code
 let g_yellowAnimation=false;  //Always start without animation when starting up
 let mouse_x = 0;
 let mouse_y = 0;
@@ -116,17 +117,26 @@ function addActionForHTMLUI(){
     renderAllShapes(); 
   });  //calls renderallshapes everytime the slider moves dynamically. Updates happen on the current state of the world.
 
+//Chat gpt helped me debug my slider control for a second level joint (I originally had but got rid of and couldn't get it to work anymore when I tried implementing again). So it suggested me to add this line of code
   document.getElementById('angleSlideY').addEventListener('input', function() {
     g_globalAngleY = this.value; 
     renderAllShapes(); 
   });
   // Color Slider Events
-  document.getElementById('yellowSlide').addEventListener('input', function() {g_yellowAngle = this.value; renderAllShapes();});
+  //document.getElementById('yellowSlide').addEventListener('input', function() {g_yellowAngle = this.value; renderAllShapes();});
 
   document.getElementById('yellowSlideRight').addEventListener('input', function() {g_yellowAngleRight = this.value; renderAllShapes();});
 
 
   document.getElementById('left_foot_Slide').addEventListener('input', function() {g_left_footangle = this.value; renderAllShapes();});
+
+  //Chat gpt helped me debug my slider control for a second level joint (I originally had but got rid of and couldn't get it to work anymore when I tried implementing again). So it suggested me to add this snippet of code
+  document.getElementById('midLegSlider').addEventListener('input', function() {
+    // Update the rotation angle of the mid left leg and the foot
+    g_midLegAngle = this.value;
+    // Render all shapes with updated rotation angle
+    renderAllShapes();
+});
 
 // Mouse control to rotate canvas(CHATGPT helped me with this):
 canvas.addEventListener('mousedown', function(ev) {
@@ -350,15 +360,16 @@ function renderAllShapes(){
   upper_leg2.matrix.scale(0.31,0.15,0.13);
   upper_leg2.render();
 
-  //mid left leg
+  // mid left leg
   var mid_leg1 = new Cube();
   mid_leg1.color = [1, 1, 0.0, 1.0];
   mid_leg1.matrix.translate(0, -0.45, -0.15); // Translate to the base of the leg
   mid_leg1.matrix.rotate(g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
-  var left_foot_coordMat = new Matrix4(mid_leg1.matrix);
+  mid_leg1.matrix.rotate(g_midLegAngle, 0, 0, 1);  // Rotate the mid leg //Chat gpt helped me debug my slider control for a second level joint (I originally had but got rid of and couldn't get it to work anymore when I tried implementing again). So it suggested me to add this snippet of code
+  var left_foot_coordMat = new Matrix4(mid_leg1.matrix); //Debugged chat gpt suggested code
   mid_leg1.matrix.scale(0.08,0.5,0.08);
-  //mid_leg1.matrix.translate(0, -0.20, 0.15); // Translate back to the original position
   mid_leg1.render();
+
 
   // //mid right leg
   var mid_leg2 = new Cube();
@@ -370,15 +381,16 @@ function renderAllShapes(){
   mid_leg2.matrix.scale(0.08,0.5,0.08);
   mid_leg2.render();
 
-  //left foot
+  // left foot
   var left_foot = new Cube();
   left_foot.color = [1, 1, 0.0, 1.0];
-  left_foot.matrix = left_foot_coordMat;
+  left_foot.matrix = left_foot_coordMat;   //Chat gpt helped me debug my slider control for a second level joint (I originally had but got rid of and couldn't get it to work anymore when I tried implementing again). So it suggested me to add this snippet of code
   left_foot.matrix.translate(0.0, -0.45, 0)
-  left_foot.matrix.rotate(g_left_footangle, 0, 1, 0);
+  left_foot.matrix.rotate(g_left_footangle, 0, 1, 0);   //Chat gpt helped me debug my slider control for a second level joint (I originally had but got rid of and couldn't get it to work anymore when I tried implementing again). So it suggested me to add this snippet of code
   left_foot.matrix.scale(0.2,0.10,0.2);
   left_foot.matrix.translate(-0.3, 1.5, 0)
   left_foot.render();
+
 
   //right foot
   var right_foot = new Cube();
