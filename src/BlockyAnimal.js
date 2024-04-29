@@ -121,12 +121,12 @@ function addActionForHTMLUI(){
     renderAllShapes(); 
   });
   // Color Slider Events
-  document.getElementById('yellowSlide').addEventListener('mousemove', function() {g_yellowAngle = this.value; renderAllShapes();});
+  document.getElementById('yellowSlide').addEventListener('input', function() {g_yellowAngle = this.value; renderAllShapes();});
 
-  document.getElementById('yellowSlideRight').addEventListener('mousemove', function() {g_yellowAngleRight = this.value; renderAllShapes();});
+  document.getElementById('yellowSlideRight').addEventListener('input', function() {g_yellowAngleRight = this.value; renderAllShapes();});
 
 
-  document.getElementById('left_foot_Slide').addEventListener('mousemove', function() {g_left_footangle = this.value; renderAllShapes();});
+  document.getElementById('left_foot_Slide').addEventListener('input', function() {g_left_footangle = this.value; renderAllShapes();});
 
 // Mouse control to rotate canvas(CHATGPT helped me with this):
 canvas.addEventListener('mousedown', function(ev) {
