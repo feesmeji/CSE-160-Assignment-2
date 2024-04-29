@@ -21,7 +21,8 @@ class Cube{
         
     
 //CHATGPT Helped me center the cube on the origin with the correct coordinates.
-// I originally was printing cubes on the 1st quadrant which I didn't like (profs code).
+//I later mapped out by hand each point on a visualizing tool to make sure it was positioned correctly centered on the origin.
+// I originally was printing cubes on the 1st quadrant which I didn't like.
 
         //Front of cube
         drawTriangle3D([-0.5,-0.5,-0.5,  0.5,0.5,-0.5,  0.5,-0.5,-0.5]);

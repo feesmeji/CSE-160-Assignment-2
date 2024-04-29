@@ -96,6 +96,7 @@ let g_globalAngle = 0;
 let g_globalAngleY = 0;
 let g_yellowAngle = 0;
 let g_yellowAngleRight = 0;
+let g_left_footangle = 0;
 let g_yellowAnimation=false;  //Always start without animation when starting up
 let mouse_x = 0;
 let mouse_y = 0;
@@ -124,6 +125,8 @@ function addActionForHTMLUI(){
 
   document.getElementById('yellowSlideRight').addEventListener('mousemove', function() {g_yellowAngleRight = this.value; renderAllShapes();});
 
+
+  document.getElementById('left_foot_Slide').addEventListener('mousemove', function() {g_left_footangle = this.value; renderAllShapes();});
 
 // Mouse control to rotate canvas(CHATGPT helped me with this):
 canvas.addEventListener('mousedown', function(ev) {
@@ -168,7 +171,7 @@ function main() {
   canvas.onmousemove = function (ev) { if(ev.buttons == 1) {click(ev) } };  //drag and move mouse on canvas
 
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.5, 0.5, 0.5, 1.0);
+  gl.clearColor(0.7, 0.85, 0.95, 1.0); //Chatgpt helped me calculate a good color for my background to allow the shadows to appear nicely (baby blue)
 
   // Register function (event handler) to be called on a mouse press
   //Code borrowed and learned from: https://people.ucsc.edu/~jrgu/asg2/blockyAnimal/BlockyAnimal.js
@@ -177,7 +180,7 @@ function main() {
   canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev) } };
 
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //clears the color and the depths
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //clears the color and the depths (Rohan the course tutor helped me with this line of code)
 
   //renderAllShapes();
   requestAnimationFrame(tick);
@@ -196,7 +199,7 @@ var g_seconds=performance.now/1000.0-g_startTime;
 //Called by the broswer repeatedly whenever its time
 function tick(){
   // Save the current time
-  g_seconds = performance.now()/130.0-g_startTime;
+  g_seconds = performance.now()/120.0-g_startTime;
   //console.log(g_seconds);
 
   //Update Animation Angles
@@ -248,7 +251,7 @@ function convertCoordinatesEventToGL(ev){
 
 function updateAnimationAngles(){ //put all of the different angles that we are going to move with the on/off button here
   if (g_yellowAnimation){                             //g_yellowAnimation is currently being used to animate all of the objects
-    g_yellowAngle = (-34*Math.sin(g_seconds));
+    g_yellowAngle = (-34*Math.sin(g_seconds));        //ChatGPT helped me figure out the math for the angle rotations for the animations
   }
   if(g_yellowAnimation){
     g_yellowAngleRight = (34*Math.sin(g_seconds));
@@ -291,7 +294,7 @@ function renderAllShapes(){
   var right_wing = new Cube();
   right_wing.color = [1.0, 1.0, 1.0, 1.0];
   right_wing.matrix.translate(0.0, 0.10, 0.35);
-  right_wing.matrix.scale(0.5, 0.4, 0.10); // Keep the original scale values
+  right_wing.matrix.scale(0.5, 0.4, 0.10); 
   right_wing.render();
   
   //Head
@@ -303,7 +306,7 @@ function renderAllShapes(){
 
   //beak
   var beak = new Cube();
-  beak.color = [0.9647, 0.9255, 0.5216, 1.0];
+  beak.color = [1, 1, 0.0, 1.0];
   beak.matrix.translate(-0.57, 0.3, 0);
   beak.matrix.scale(0.20, 0.20, 0.5); 
   beak.render();
@@ -334,20 +337,22 @@ function renderAllShapes(){
   //upper left leg
   var upper_leg1 = new Cube();
   upper_leg1.color = [1.0, 1.0, 1.0, 1.0];
-  upper_leg1.matrix.translate(0, -0.35, -0.15)
-  upper_leg1.matrix.scale(0.3,0.13,0.13);
+  upper_leg1.matrix.translate(0, -0.25, -0.15)
+  upper_leg1.matrix.rotate(g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
+  upper_leg1.matrix.scale(0.31,0.15,0.13);
   upper_leg1.render();
 
   //upper right leg
   var upper_leg2 = new Cube();
   upper_leg2.color = [1.0, 1.0, 1.0, 1.0];
-  upper_leg2.matrix.translate(0, -0.35, 0.15)
-  upper_leg2.matrix.scale(0.3,0.13,0.13);
+  upper_leg2.matrix.translate(0, -0.25, 0.15)
+  upper_leg2.matrix.rotate(g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
+  upper_leg2.matrix.scale(0.31,0.15,0.13);
   upper_leg2.render();
 
   //mid left leg
   var mid_leg1 = new Cube();
-  mid_leg1.color = [0.9647, 0.9255, 0.5216, 1.0];
+  mid_leg1.color = [1, 1, 0.0, 1.0];
   mid_leg1.matrix.translate(0, -0.45, -0.15); // Translate to the base of the leg
   mid_leg1.matrix.rotate(g_yellowAngle, 0, 0, 1);  // Rotate around the z-axis
   var left_foot_coordMat = new Matrix4(mid_leg1.matrix);
@@ -357,7 +362,7 @@ function renderAllShapes(){
 
   // //mid right leg
   var mid_leg2 = new Cube();
-  mid_leg2.color = [0.9647, 0.9255, 0.5216, 1.0];
+  mid_leg2.color = [1, 1, 0.0, 1.0];
   mid_leg2.matrix.translate(0, -0.45, 0.15)
   //mid_leg2.matrix.rotate(-g_yellowAngleRight, 0, 0, 1);  // Rotate around the z-axis
   mid_leg2.matrix.rotate(g_yellowAngleRight, 0, 0, 1);  // Rotate around the z-axis
@@ -367,22 +372,30 @@ function renderAllShapes(){
 
   //left foot
   var left_foot = new Cube();
-  left_foot.color = [0.9647, 0.9255, 0.5216, 1.0];
+  left_foot.color = [1, 1, 0.0, 1.0];
   left_foot.matrix = left_foot_coordMat;
   left_foot.matrix.translate(0.0, -0.45, 0)
+  left_foot.matrix.rotate(g_left_footangle, 0, 1, 0);
   left_foot.matrix.scale(0.2,0.10,0.2);
   left_foot.matrix.translate(-0.3, 1.5, 0)
   left_foot.render();
 
   //right foot
   var right_foot = new Cube();
-  right_foot.color = [0.9647, 0.9255, 0.5216, 1.0];
+  right_foot.color = [1, 1, 0.0, 1.0];
   right_foot.matrix = right_foot_coordMat;
   right_foot.matrix.translate(0.0, -0.45, 0.0)
   right_foot.matrix.scale(0.2,0.10,0.2);
   right_foot.matrix.translate(-0.3, 1.5, 0)
   // right_foot.matrix.scale(0.2,0.10,0.2);
   right_foot.render();
+
+  // //Party hat!!
+   var hat = new Pyramid();
+   hat.color = [0.0, 1.0, 0.0, 1.0];
+   hat.matrix.translate(-0.35, 0.65, 0.0);
+   hat.matrix.scale(0.2, 0.2, 0.2);
+   hat.render();
 
 //Prof's drawing
   // //Draw a cube (red one)
