@@ -1,5 +1,7 @@
 // ColoredPoint.js (c) 2012 matsuda
 // Vertex shader program
+//Assignment notes to grader:Notes to grader: Most code based off of Professor's walkthrough videos. ChatGPT helped me debug, get unstuck with my code, and learn new stuff for my code. I made comments in my code indicating where it was used. Also recieved small help from course tutor. I also borrowed a few lines of code from: https://people.ucsc.edu/~jrgu/asg2/blockyAnimal/BlockyAnimal.js to learn how to get a shift-click input to work (I indicated in code comments where it was used). 
+
 var VSHADER_SOURCE = `
   attribute vec4 a_Position;
   uniform mat4 u_ModelMatrix;
